@@ -1,0 +1,22 @@
+﻿// ~Julien 23/01/2013
+#ifndef CONSOLE_DISPLAY_H_INCLUDED
+#define CONSOLE_DISPLAY_H_INCLUDED
+
+#include "../model/data_models.h"
+
+// Fonctions d'affichage:
+coord jeu_humain(plateau p, char pion, int level); // Retourne les coordonnées choisies par le joueur
+void affiche_plateau(plateau *p); // Affiche le plateau dans son état courant
+
+void affiche_menu(); // Affiche le menu principal du jeu
+
+//Fonctions d'acquisition de données:
+int choix_menu(); // Retourne le choix de l'utilisateur dans le menu principal
+int choix_dimension();
+int choix_type();
+char choix_couleur();
+int choix_level();
+int choix_ia();
+
+
+#endif // CONSOLE_DISPLAY_H_INCLUDED

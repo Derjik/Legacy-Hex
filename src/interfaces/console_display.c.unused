@@ -1,0 +1,207 @@
+﻿#include "console_display.h"
+
+// Dernière modif: Julien, le 25/01/2013
+
+
+/*
+	Das Sechseck !
+
+	   / \ / \
+	  |   |   |
+	 / \ / \ / \
+	|   |   |   |
+	 \ / \ / \ /
+	  |   |   |
+	   \ / \ /
+
+*/
+
+void affiche_menu()
+{
+	printf("### Jeu de Hex! ###\n");
+	printf("1. Nouvelle partie\n2. Charger partie\n0. Quitter\n");
+	return;
+}
+
+int choix_menu()
+{
+	int choix=0;
+	printf("> ");
+	scanf("%d", &choix);
+	return choix;
+}
+
+int choix_dimension()
+{
+	int dim = -1;
+	printf("Choisissez la dimension parmi les suivantes: 5, 7, 8, 10, 11, 13\n");
+	do
+	{
+		printf("> ");
+		scanf("%d", &dim);
+	}while(dim!=5 && dim!=7 && dim!=8 && dim!=10 && dim!=11 && dim!=13);
+	return dim;
+}
+
+int choix_type()
+{
+	int type = -1;
+	printf("Choisissez le type de jeu parmi les suivants:\n1. Humain contre Humain\n2. Humain contre Machine\n3. Machine contre Machine\n");
+	do
+	{
+		printf("> ");
+		scanf("%d", &type);
+	}while(type!=1 && type!=2 && type!=3);
+	return type;
+}
+
+char choix_couleur()
+{
+	char couleur = 'V';
+	printf("Choisissez votre couleur: N pour Noir, B pour Blanc\n");
+	do
+	{
+		printf("> ");
+		scanf("\n%c", &couleur);
+	}while(couleur != 'N' && couleur != 'B');
+	return couleur;
+}
+
+int choix_level()
+{
+	int choix = -1, correspondance = -1;
+	printf("Choisissez le niveau de difficulte de l'ordinateur:\n");
+	printf("1. Facile\n2. Moyen\n3. Difficile\n4.Nash\n");
+	do
+	{
+		printf("> ");
+		scanf("%d", &choix);
+	}while(choix != 1 && choix != 2 && choix != 3);
+
+	switch(choix)
+	{
+		case 1:
+			correspondance= 1;
+		break;
+
+		case 2:
+			correspondance= 10;
+		break;
+
+		case 3:
+			correspondance= 20;
+		break;
+
+		case 4:
+			correspondance= 25;
+		break;
+	}
+	return correspondance;
+}
+
+int choix_ia()
+{
+	int ia = -1;
+	printf("Choisissez un type d'IA parmi les suivants:\n");
+	printf("1. Brainless\n2. Electrique\n3. Losange\n");
+	do
+	{
+		printf("> ");
+		scanf("%d", &ia);
+	}while(ia != 1 && ia != 2 && ia != 3);
+	return ia;
+}
+
+void affiche_plateau(plateau *p)
+{
+	int i,j;
+
+	printf("\n");
+	printf("   x ");
+	printf("\n");
+	printf(" y  ");
+	for ( i = 0 ; i < p->dim ; i++ )
+	{
+		printf("%2d  ", i+1);
+	}
+	printf("\n");
+	for ( i = 0 ; i < p->dim ; i++ )
+	{
+		if(i > 0)
+		{
+			for (j = 0 ; j < 2*(i+1) ; j++ )
+			{
+				printf(" ");
+			}
+			printf("\\");
+		}
+		else
+		{
+			printf("   ");
+		}
+		for (j = 0 ; j < p->dim ; j++)
+		{
+			printf(" / \\");
+		}
+		printf("\n");
+
+		for (j = 0 ; j < i ; j++ )
+		{
+			printf("  ");
+		}
+		printf("%2d ", i+1);
+		for (j = 0 ; j < p->dim ; j++)
+		{
+			switch(p->tab[i][j])
+			{
+				case 'N':
+					printf("| %c ", 1);
+				break;
+				case 'B':
+					printf("| %c ", 2);
+				break;
+				case 'V':
+					printf("|   ");
+				break;
+			}
+		}
+		printf("|\n");
+
+
+	}
+	for (j = 0 ; j < p->dim*2+1 ; j++ )
+	{
+		printf(" ");
+	}
+	for (j = 0 ; j < p->dim ; j++)
+	{
+		printf(" \\ /");
+	}
+	printf("\n");
+
+	printf("\n");
+}
+
+coord jeu_humain(plateau p, char pion, int level)
+{
+	coord a_renvoyer;
+
+	printf("Au tour de %c: (x=0 pour sauver)\n", pion);
+	do
+	{
+		printf("x> ");
+		scanf("%d", &(a_renvoyer.x));
+		a_renvoyer.x--;
+		if(a_renvoyer.x==-1) return a_renvoyer;
+		printf("y> ");
+		scanf("%d", &(a_renvoyer.y));
+		a_renvoyer.y--;
+		if(a_renvoyer.x<0 || a_renvoyer.y < 0 || a_renvoyer.x >= p.dim || a_renvoyer.y >= p.dim || p.tab[a_renvoyer.y][a_renvoyer.x] != 'V')
+		{
+			printf("Cette case est déjà occupée ou hors du plateau de jeu, veuillez en saisir une autre s'il vous plait. \n\n");
+		}
+
+	}while(a_renvoyer.x<0 || a_renvoyer.y < 0 || a_renvoyer.x >= p.dim || a_renvoyer.y >= p.dim || p.tab[a_renvoyer.y][a_renvoyer.x] != 'V');
+
+	return a_renvoyer;
+}
